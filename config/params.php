@@ -7,4 +7,5 @@ return [
     'twilioSID' => '',
     'twilioToken' => '',
     'twilioFromNumber' => '',
+    'twilioToNumber' => '',
 ];
