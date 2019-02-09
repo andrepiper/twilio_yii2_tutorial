@@ -101,8 +101,8 @@ class SiteController extends Controller
 
                 ]
             ];
-
-            $response = $services->generatePaymentUrl($paypalPayment);
+            $callbackUrl = "/";
+            $response = $services->generatePaymentUrl($paypalPayment, $callbackUrl);
 
             if($response->getSuccess())
             {
@@ -144,7 +144,7 @@ class SiteController extends Controller
             $response = $services->makePayment($payload);
             if($response->getSuccess())
             {
-                $smsPayload = $services->sendAlert($from,"+1251", "PayPal order completed. Receipt #: ".$response->getPayload()->getId()." Total $:".$payload['order']['total'].' USD');
+                $smsPayload = $services->sendAlert($from,"+", "PayPal order completed. Receipt #: ".$response->getPayload()->getId()." Total $:".$payload['order']['total'].' USD');
                 return $this->render('index',['payload'=>$response, 'sms'=>$smsPayload]);
             }
         }

@@ -47,7 +47,7 @@ class AppServices implements IAppServices
      * @param $params
      * @return AppResponse
      */
-    public function generatePaymentUrl($params)
+    public function generatePaymentUrl($params, $callbackUrl)
     {
         $response = new AppResponse();
         try
@@ -84,7 +84,7 @@ class AppServices implements IAppServices
                 ->setDescription($params['order']['description'])
                 ->setInvoiceNumber(uniqid());
 
-            $redirectUrl = Url::to(['/'],true);
+            $redirectUrl = Url::to([$callbackUrl],true);
             $redirectUrls = new RedirectUrls();
             $redirectUrls->setReturnUrl("$redirectUrl?success=true")
                 ->setCancelUrl("$redirectUrl?success=false");

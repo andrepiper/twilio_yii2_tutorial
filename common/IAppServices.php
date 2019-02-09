@@ -5,7 +5,7 @@ namespace app\common;
 
 interface IAppServices
 {
-    function generatePaymentUrl($params);
+    function generatePaymentUrl($params, $callbackUrl);
 
     function makePayment($payload);
 
