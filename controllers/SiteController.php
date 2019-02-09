@@ -71,6 +71,7 @@ class SiteController extends Controller
         $twilioSID = \Yii::$app->params['twilioSID'];
         $twilioToken = \Yii::$app->params['twilioToken'];
         $from = \Yii::$app->params['twilioFromNumber'];
+        $to = \Yii::$app->params['twilioToNumber'];
 
         $success = Yii::$app->request->get('success');
         $response = new AppResponse();
@@ -144,7 +145,7 @@ class SiteController extends Controller
             $response = $services->makePayment($payload);
             if($response->getSuccess())
             {
-                $smsPayload = $services->sendAlert($from,"+", "PayPal order completed. Receipt #: ".$response->getPayload()->getId()." Total $:".$payload['order']['total'].' USD');
+                $smsPayload = $services->sendAlert($from, $to, "PayPal order completed. Receipt #: ".$response->getPayload()->getId()." Total $:".$payload['order']['total'].' USD');
                 return $this->render('index',['payload'=>$response, 'sms'=>$smsPayload]);
             }
         }
