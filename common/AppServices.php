@@ -19,7 +19,7 @@ use PayPal\Api\CreditCard;
 use PayPal\Exception\PaypalConnectionException;
 use yii\helpers\Url;
 
-class AppServices implements IAppServices
+class AppServices
 {
     /**
      * @var SDK keys and secrets
