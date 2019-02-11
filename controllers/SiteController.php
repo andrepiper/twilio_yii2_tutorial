@@ -56,16 +56,9 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex()
+
+    public function actionPayment()
     {
-        /**
-         * Init vars and get success from query param
-         */
         $paypalKey = \Yii::$app->params['paypalKey'];
         $paypalSecret = \Yii::$app->params['paypalSecret'];
         $twilioSID = \Yii::$app->params['twilioSID'];
@@ -76,44 +69,8 @@ class SiteController extends Controller
         $success = Yii::$app->request->get('success');
         $response = new AppResponse();
         $services = new AppServices($paypalKey,$paypalSecret,$twilioSID,$twilioToken);
-
-        /**
-         * If a post operation was done
-         */
-        if (Yii::$app->request->post())
-        {
-            $paypalPayment = [
-                'method'=>'paypal',
-                'intent'=>'sale',
-                'order'=>[
-                    'description'=>'Payment description',
-                    'subtotal'=>150,
-                    'shippingCost'=>0,
-                    'total'=>150,
-                    'currency'=>'USD',
-                    'items'=>[
-                        [
-                            'name'=>'Super Awesome Product',
-                            'price'=>150,
-                            'quantity'=>1,
-                            'currency'=>'USD'
-                        ]
-                    ]
-
-                ]
-            ];
-            $callbackUrl = "/";
-            $response = $services->generatePaymentUrl($paypalPayment, $callbackUrl);
-
-            if($response->getSuccess())
-            {
-                return $this->redirect($response->getPayload()->getHeaders()->get("location"));
-            }
-        }
-        /*
-         * Paypal callback
-         */
-        else if($success && $success == 'true')
+        
+        if($success && $success == 'true')
         {
             $paymentId = Yii::$app->request->get('paymentId');
             $token = Yii::$app->request->get('token');
@@ -149,6 +106,57 @@ class SiteController extends Controller
                 return $this->render('index',['payload'=>$response, 'sms'=>$smsPayload]);
             }
         }
+        /**
+         * load index action normally
+         */
+        return $this->render('index', ['payload'=>$response]);
+    }
+    public function actionIndex()
+    {
+        $paypalKey = \Yii::$app->params['paypalKey'];
+        $paypalSecret = \Yii::$app->params['paypalSecret'];
+        $twilioSID = \Yii::$app->params['twilioSID'];
+        $twilioToken = \Yii::$app->params['twilioToken'];
+        $from = \Yii::$app->params['twilioFromNumber'];
+        $to = \Yii::$app->params['twilioToNumber'];
+
+        $response = new AppResponse();
+        $services = new AppServices($paypalKey,$paypalSecret,$twilioSID,$twilioToken);
+
+        /**
+         * If a post operation was done
+         */
+        if (Yii::$app->request->post())
+        {
+            $paypalPayment = [
+                'method'=>'paypal',
+                'intent'=>'sale',
+                'order'=>[
+                    'description'=>'Payment description',
+                    'subtotal'=>150,
+                    'shippingCost'=>0,
+                    'total'=>150,
+                    'currency'=>'USD',
+                    'items'=>[
+                        [
+                            'name'=>'Super Awesome Product',
+                            'price'=>150,
+                            'quantity'=>1,
+                            'currency'=>'USD'
+                        ]
+                    ]
+
+                ]
+            ];
+            $callbackUrl = "/payment";
+            $response = $services->generatePaymentUrl($paypalPayment, $callbackUrl);
+
+            if($response->getSuccess())
+            {
+                return $this->redirect($response->getPayload()->getHeaders()->get("location"));
+            }
+        }
+
         /**
          * load index action normally
          */
