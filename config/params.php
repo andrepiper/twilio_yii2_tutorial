@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'adminEmail' => '',
+    'adminEmail' => 'andrepiper@gmail.com',
     'paypalKey' => '',
     'paypalSecret' => '',
     'twilioSID' => '',
     'twilioToken' => '',
-    'twilioFromNumber' => '',
-    'twilioToNumber' => '',
+    'twilioFromNumber' => '+',//+1251234567
+    'twilioToNumber' => '+',//+1251234567
 ];

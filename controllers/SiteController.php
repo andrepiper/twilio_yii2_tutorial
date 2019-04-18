@@ -148,7 +148,7 @@ class SiteController extends Controller
 
                 ]
             ];
-            $callbackUrl = "/payment";
+            $callbackUrl = "/site/payment";
             $response = $services->generatePaymentUrl($paypalPayment, $callbackUrl);
 
             if($response->getSuccess())
